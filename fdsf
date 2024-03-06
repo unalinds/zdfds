@@ -1,4 +1,12 @@
- 
+1)O campo código deve ser único.--auto increment
+2)A tela deve ter as 4 funções de uma CRUD (CREATE, UPDATE  READ e DELETE).
+3)Quando estiver selecionado algum registro no DataGridView, deve automaticamente ser carregadas as informações pertinentes ao cliente selecionado e ser fechado a tela de consulta.
+4)Ao clicar na linha do datagridview deve ser carregado os dados do cliente nos campos text,combo e outros controles.
+5)Caso seja, alterado alguma informação, deve ser salva no banco (UPDATE)
+6)Deve ser criado um campo status, onde caso o cliente esteja inativo, deve colorir no datadridview a linha em vermelho, caso esteja ativo, colorir em azul.
+
+
+
 using System;
 
 namespace ValidateCNPJ
