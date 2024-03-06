@@ -1,0 +1,27 @@
+ private void save_Click(object sender, EventArgs e)
+        {
+	       string valor = cpf.Text;
+                if (Validacao.ValidaCPF.IsCpf(valor))
+                {
+
+                }
+                else
+                {
+                    errorProvider8.SetError(cpf, "Insira um cpf valido");
+                }
+            
+
+        }
+
+       
+        private void cpf_CheckedChanged(object sender, EventArgs e)
+        {
+            cpf.Text = "";
+            cpf.Mask = "000-000-000-00";
+            cpf.MaskInputRejected += new MaskInputRejectedEventHandler(cpf_MaskInputRejected);
+        }
+
+        private void cpf_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
+        }
