@@ -1,34 +1,449 @@
-Error	1	Program 'c:\Users\laura.campos\Desktop\Exercicios\Programação\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe' has more than one entry point defined: 'WindowsFormsApplication1.Program.Main()'.  Compile with /main to specify the type that contains the entry point.	C:\Users\laura.campos\Desktop\Exercicios\Programação\WindowsFormsApplication1\WindowsFormsApplication1\Program.cs	15	21	WindowsFormsApplication1
+https://www.youtube.com/watch?v=fRryHBD_Mko
+
+insert button in C# Windows form application swit clog
+
+adicionar imagem
 
 
-
-
-
+pessoa juridica
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Text.RegularExpressions;
 using System.Data.SqlClient;
 
-class Program
+namespace WindowsFormsApplication1
 {
-    static void Main()
+    public partial class Pjuridica : Form
     {
-        // String de conexão com o banco de dados
-        string connectionString = "Data Source=YourServerName;Initial Catalog=YourDatabaseName;User ID=YourUsername;Password=YourPassword;";
+        public int emailJ;
+        public int cnpJ;
+        public string mensagem;
+        public string ValidateCnpj;
+        public string connetionString;
 
-        // Criando uma conexão com o banco de dados
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        public Pjuridica()
         {
+            InitializeComponent();
+            LoadData();
+        }
+
+
+        SqlConnection comn = new SqlConnection(@"Data Source=CANCUN\SQLEXPRESS;Initial Catalog=exProgramacao;User ID=sa;Password=zx862");
+
+   
+        private void LoadData()
+        {
+            comn.Open();
+            string sql = "select * from Pjuridica";
+            SqlCommand command = new SqlCommand(sql, comn);
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+            DataSet set = new DataSet();
+            adapter.Fill(set);
+            Pjuridica.DataSource = set.Tables[0];
+            comn.Close();
+        }
+
+
+        public void identify ()
+        {
+            string pattern = "^([0-9a-zA-Z]([-\\.\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})$";
+
+            if(Regex.IsMatch(email.Text, pattern) ==  false)
+            {
+                if(email.Text.All(Char.IsWhiteSpace))
+                {
+                    emailJ = 1;
+                    errorProvider7.Clear();
+                }
+                else
+                {
+                    emailJ = 0;
+                    errorProvider7.SetError(this.email, "Insira outro email");
+                    return;
+                }
+
+            }
+        } 
+ 
+        private void Tobservacao_Click(object sender, EventArgs e)
+        {
+        }
+
+
+        private void clean_Click(object sender, EventArgs e)
+        {
+            Pjuridica NewForm = new Pjuridica();
+            NewForm.Show();
+            this.Dispose(false);
+        }
+
+        private void save_Click(object sender, EventArgs e)
+        {
+
+            
+
+            if (string.IsNullOrEmpty(name.Text.Trim()))
+            {
+                errorProvider1.SetError(name, "Insira um nome");
+                return;
+            }
+            else
+            {
+                errorProvider1.SetError(name, string.Empty);
+            }
+
+
+            if (string.IsNullOrEmpty(addres.Text.Trim()))
+            {
+                errorProvider2.SetError(addres, "Insira um endereço");
+                return;
+            }
+            else
+            {
+                errorProvider2.SetError(addres, string.Empty);
+            }
+
+
+            if (string.IsNullOrEmpty(state.Text.Trim()))
+            {
+                errorProvider3.SetError(state, "Insira um estado");
+                return;
+            }
+            else
+            {
+                errorProvider3.SetError(state, string.Empty);
+            }
+
+
+            if (string.IsNullOrEmpty(city.Text.Trim()))
+            {
+                errorProvider4.SetError(city, "Insira uma cidade");
+                return;
+            }
+            else
+            {
+                errorProvider4.SetError(city, string.Empty);
+            }
+
+
+
+            if (string.IsNullOrEmpty(cnpj.Text.Trim()))
+            {
+                errorProvider5.SetError(cnpj, "Insira um cnpj");
+                return;
+            }
+            else
+            {
+                errorProvider5.SetError(cnpj, string.Empty);
+            }
+
+
+            if (string.IsNullOrEmpty(date.Text.Trim()))
+            {
+                errorProvider6.SetError(date, "Insira uma data");
+                return;
+            }
+            else
+            {
+                errorProvider6.SetError(date, string.Empty);
+            }
+
+            string valor = cnpj.Text;
+            if (ValidateCNPJ.ValidadateCNPJ.IsCnpj(valor))
+            {
+                cnpJ = 1;
+                errorProvider8.Clear();           
+            }         
+            else
+            {
+                  errorProvider8.SetError(cnpj, "Insira um cnpj valido");
+                  return;
+            }
+
             try
             {
-                // Abrindo a conexão
-                connection.Open();
-                Console.WriteLine("Conexão bem-sucedida!");
-            }
-            catch (Exception ex)
+                comn.Open();
+                string query = "INSERT INTO Pjuridica(name, addres, street, streetNumber, cep, state, cnpj, ie, cellNumber, landlineNumber, email, date, observation) VALUES('" + name + "','" + addres + "','" + street + "','" + streetNumber + "','" + cep + "','" + state + "','" + cnpj + "','" + ie + "','" + cellNumber + "','" + landlineNumber + "','" + email + "','" + date + "','" + observation + "')";
+                SqlDataAdapter SDA = new SqlDataAdapter(query, comn);
+                SDA.SelectCommand.ExecuteNonQuery();
+             }
+            catch(Exception ex)
             {
-                // Lidando com exceções, se houver
-                Console.WriteLine("Ocorreu um erro: " + ex.Message);
+                MessageBox.Show("Error" + ex);
             }
+            finally
+            {
+                comn.Close();
+            }
+
+
+            identify( );
+
+
+
+
+
+            
+            Vpjuridica.Enabled = true;
+
+            MessageBox.Show(mensagem, "Registro incluído com sucesso!"); 
         }
+
+              private void cnpJ_CheckedChanged(object sender, EventArgs e)
+             {
+              cnpj.Text = "";
+              cnpj.Mask = "00,000,000/0000-00";
+              cnpj.MaskInputRejected += new MaskInputRejectedEventHandler(cnpj_MaskInputRejected);
+              }
+
+        private void cnpj_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {  }
+       private void Tcity_Click(object sender, EventArgs e)
+        {   }
+        private void Tname_Click(object sender, EventArgs e)
+        {  }
+        private void Taddres_Click(object sender, EventArgs e)
+        { }
+        private void Tstreet_Click(object sender, EventArgs e)
+        { }
+        private void Vpjuridica_Click(object sender, EventArgs e)
+        {
+            var PgInicial = new PgInicial();
+            PgInicial.Show();
+        }
+        private void TstreetNumber_Click(object sender, EventArgs e)
+        { }
+
+        private void Pjuridica_Load(object sender, EventArgs e)
+        {
+            // TODO: This line of code loads data into the 'exProgramacaoDataSet.Pjuridica' table. You can move, or remove it, as needed.
+            this.pjuridicaTableAdapter.Fill(this.exProgramacaoDataSet.Pjuridica);
+            Vpjuridica.Enabled = false;
+            LoadData();            
+
+        }
+        private void landlineNumber_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {  }
+        
+        private void pjuridicaBindingNavigatorSaveItem_Click(object sender, EventArgs e)
+        {
+            this.Validate();
+            this.pjuridicaBindingSource.EndEdit();
+            this.tableAdapterManager.UpdateAll(this.exProgramacaoDataSet);
+        }
+
+        private void email_TextChanged(object sender, EventArgs e)
+        {   }
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {   }
+
+        private void observation_TextChanged(object sender, EventArgs e)
+        {   }
+
+        public static DataTable DataSource { get; set; }
+
+        private void pjuridicaDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            LoadData();            
+
+        }
+
+
     }
 }
 
+
+
+
+pessoa fisica
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Text.RegularExpressions;
+
+namespace WindowsFormsApplication1
+{
+    public partial class Pfisic : Form
+    {
+        public int emailF;
+        public int cpF;
+        public string mensagem;
+        public string ValidateCpf; 
+
+        public Pfisic()
+        {
+            InitializeComponent();
+        }
+
+        private void Vpfisic_Click(object sender, EventArgs e)
+        {
+            var PgInicial = new PgInicial();
+            PgInicial.Show();
+        }
+
+        private void save_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(name.Text.Trim()))
+            {
+                errorProvider1.SetError(name, "Insira um nome");
+                return;
+            }
+            else
+            {
+                errorProvider1.SetError(name, string.Empty);
+            }
+
+
+            if (string.IsNullOrEmpty(addres.Text.Trim()))
+            {
+                errorProvider2.SetError(addres, "Insira um endereço");
+                return;
+            }
+            else
+            {
+                errorProvider2.SetError(addres, string.Empty);
+            }
+
+
+            if (string.IsNullOrEmpty(state.Text.Trim()))
+            {
+                errorProvider3.SetError(state, "Insira um estado");
+                return;
+            }
+            else
+            {
+                errorProvider3.SetError(state, string.Empty);
+            }
+
+
+            if (string.IsNullOrEmpty(city.Text.Trim()))
+            {
+                errorProvider4.SetError(city, "Insira uma cidade");
+                return;
+            }
+            else
+            {
+                errorProvider4.SetError(city, string.Empty);
+            }
+
+
+            if (string.IsNullOrEmpty(cpf.Text.Trim()))
+            {
+                errorProvider5.SetError(cpf, "Insira um cpf");
+            }
+            else
+            {
+                errorProvider5.SetError(cpf, string.Empty);
+            }
+
+
+            if (string.IsNullOrEmpty(date.Text.Trim()))
+            {
+                errorProvider6.SetError(date, "Insira uma data");
+                return;
+            }
+            else
+            {
+                errorProvider6.SetError(date, string.Empty);
+            }
+
+            string valor = cpf.Text;
+            if (ValidateCPF.ValidadateCPF.IsCpf(valor))
+            {
+                cpF = 1;
+                errorProvider8.Clear();
+            }
+            else
+            {
+                errorProvider8.SetError(cpf, "Insira um cpf valido");
+                return;
+            } 
+            
+            
+            identify();
+
+           
+            Vpfisic.Enabled = true;
+
+            MessageBox.Show(mensagem, "Registro incluído com sucesso!");
+
+
+        }
+
+        public void identify()
+        {
+            string pattern = "^([0-9a-zA-Z]([-\\.\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})$";
+
+            if (Regex.IsMatch(email.Text, pattern) == false)
+            {
+                if (email.Text.All(Char.IsWhiteSpace))
+                {
+                    emailF = 1;
+                    errorProvider7.Clear();
+                }
+                else
+                {
+                    emailF = 0;
+                    errorProvider7.SetError(this.email, "Insira outro email");
+                }
+            }
+        }
+
+        private void cpf_CheckedChanged(object sender, EventArgs e)
+        {
+            cpf.Text = "";
+            cpf.Mask = "000-000-000-00";
+            cpf.MaskInputRejected += new MaskInputRejectedEventHandler(cpf_MaskInputRejected);
+        }
+
+        private void cpf_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+        
+        }
+
+        private void clean_Click(object sender, EventArgs e)
+        {
+            Pfisic NewForm = new Pfisic();
+            NewForm.Show();
+            this.Dispose(false);
+        }
+
+        private void pfisicBindingNavigatorSaveItem_Click(object sender, EventArgs e)
+        {
+            this.Validate();
+            this.pfisicBindingSource.EndEdit();
+            this.tableAdapterManager.UpdateAll(this.exProgramacaoDataSet);
+
+        }
+
+        private void Pfisic_Load(object sender, EventArgs e)
+        {
+            // TODO: This line of code loads data into the 'exProgramacaoDataSet.Pfisic' table. You can move, or remove it, as needed.
+            this.pfisicTableAdapter.Fill(this.exProgramacaoDataSet.Pfisic);
+
+            Vpfisic.Enabled = false;
+        }
+
+
+
+        private void pfisicDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+    }
+}
