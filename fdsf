@@ -1,3 +1,9 @@
+Error	1	Program 'c:\Users\laura.campos\Desktop\Exercicios\Programação\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe' has more than one entry point defined: 'WindowsFormsApplication1.Program.Main()'.  Compile with /main to specify the type that contains the entry point.	C:\Users\laura.campos\Desktop\Exercicios\Programação\WindowsFormsApplication1\WindowsFormsApplication1\Program.cs	15	21	WindowsFormsApplication1
+
+
+
+
+
 using System;
 using System.Data.SqlClient;
 
@@ -25,3 +31,4 @@ class Program
         }
     }
 }
+
